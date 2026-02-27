@@ -14,21 +14,23 @@ public record DisplayBookDto(
         String author,
         Genre genre,
         BookStatus status,
-        LocalDate dateAdded
+        LocalDate dateAdded,
+        DisplayUserDto user
 ) {
 
-    public static DisplayBookDto from(Book book) {
+    public static DisplayBookDto fromBook(Book book) {
         return new DisplayBookDto(
                 book.getId(),
                 book.getTitle(),
                 book.getAuthor(),
                 book.getGenre(),
                 book.getStatus(),
-                book.getDateAdded()
+                book.getDateAdded(),
+                DisplayUserDto.fromUser(book.getUser())
         );
     }
 
-    public static List<DisplayBookDto> from (List<Book> books) {
-        return books.stream().map(DisplayBookDto::from).collect(Collectors.toList());
+    public static List<DisplayBookDto> fromBooks(List<Book> books) {
+        return books.stream().map(DisplayBookDto::fromBook).collect(Collectors.toList());
     }
 }

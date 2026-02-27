@@ -82,8 +82,8 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
-    public List<Book> findAllByGenreIgnoreCase(Genre genre) {
-        return bookRepository.findAllByGenre(genre);
+    public List<Book> findAllByUserAndGenreIgnoreCase(Genre genre, User user) {
+        return bookRepository.findAllByGenreAndUser(genre, user);
     }
 
     @Override

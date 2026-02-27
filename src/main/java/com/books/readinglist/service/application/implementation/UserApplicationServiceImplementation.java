@@ -25,7 +25,7 @@ public class UserApplicationServiceImplementation implements UserApplicationServ
     public DisplayUserDto register(CreateUserDto createUserDto) {
         User user = userService.register(createUserDto.username(), createUserDto.password(), createUserDto.repeatPassword(),
                 createUserDto.name(), createUserDto.surname(), createUserDto.role());
-        return DisplayUserDto.from(user);
+        return DisplayUserDto.fromUser(user);
     }
 
     @Override
@@ -38,6 +38,6 @@ public class UserApplicationServiceImplementation implements UserApplicationServ
     @Override
     public DisplayUserDto findByUsername(String username) {
         User user = userService.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
-        return DisplayUserDto.from(user);
+        return DisplayUserDto.fromUser(user);
     }
 }

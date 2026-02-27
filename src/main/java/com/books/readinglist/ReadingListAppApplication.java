@@ -13,4 +13,8 @@ public class ReadingListAppApplication {
         SpringApplication.run(ReadingListAppApplication.class, args);
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

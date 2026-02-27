@@ -12,7 +12,7 @@ public record DisplayUserDto(
         String surname,
         Role role) {
 
-    public static DisplayUserDto from(User user) {
+    public static DisplayUserDto fromUser(User user) {
         return new DisplayUserDto(
                 user.getUsername(),
                 user.getName(),
@@ -21,8 +21,8 @@ public record DisplayUserDto(
         );
     }
 
-    public static List<DisplayUserDto> from(List<User> users){
-        return users.stream().map(DisplayUserDto::from).collect(Collectors.toList());
+    public static List<DisplayUserDto> fromUserList(List<User> users){
+        return users.stream().map(DisplayUserDto::fromUser).collect(Collectors.toList());
     }
 
 }

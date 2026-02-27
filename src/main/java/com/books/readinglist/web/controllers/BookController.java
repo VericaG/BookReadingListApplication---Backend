@@ -24,42 +24,26 @@ public class BookController {
     }
 
     @GetMapping
-    public List<DisplayBookDto> findAll() {
-        return bookApplicationService.findAll();
+    public ResponseEntity<List<DisplayBookDto>> findAll(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(bookApplicationService.findAllByUser(user.getUsername()));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DisplayBookDto> findById(@PathVariable Long id) {
+    @GetMapping("/details/{id}")
+    public ResponseEntity<DisplayBookDto> bookDetails(@PathVariable Long id) {
         return ResponseEntity.ok(bookApplicationService.findById(id));
     }
 
 
-    @GetMapping("/statuses")
-    public List<String> getBookStatus() {
-        return Arrays.stream(BookStatus.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/genres")
-    public List<String> getGenres() {
-        return Arrays.stream(Genre.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
-    }
-
-
     @PostMapping("/add")
-    public ResponseEntity<DisplayBookDto> save(@RequestBody CreateBookDto book, @AuthenticationPrincipal User user) {
+    public ResponseEntity<DisplayBookDto> add(@RequestBody CreateBookDto book, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(bookApplicationService.save(book, user.getUsername()));
     }
 
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<DisplayBookDto> update(@PathVariable Long id, @RequestBody CreateBookDto book, @AuthenticationPrincipal User user) {
+    public ResponseEntity<DisplayBookDto> edit(@PathVariable Long id, @RequestBody CreateBookDto book, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(bookApplicationService.update(id, book, user.getUsername()));
     }
-
 
 
     @DeleteMapping("/delete/{id}")
@@ -69,12 +53,12 @@ public class BookController {
     }
 
     @PutMapping("/startReading/{id}")
-    public ResponseEntity<DisplayBookDto> startReading(@PathVariable Long id){
+    public ResponseEntity<DisplayBookDto> startReading(@PathVariable Long id) {
         return ResponseEntity.ok(bookApplicationService.startReading(id));
     }
 
     @PutMapping("/finishReading/{id}")
-    public ResponseEntity<DisplayBookDto> finishReading(@PathVariable Long id){
+    public ResponseEntity<DisplayBookDto> finishReading(@PathVariable Long id) {
         return ResponseEntity.ok(bookApplicationService.finishReading(id));
     }
 }

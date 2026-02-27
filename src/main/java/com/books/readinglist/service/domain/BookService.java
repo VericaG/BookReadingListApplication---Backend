@@ -21,7 +21,7 @@ public interface BookService {
 
     List<Book> findAllByStatusAndUser(BookStatus status, User user);
     List<Book> findAllByUser(User user);
-    List<Book> findAllByGenreIgnoreCase(Genre genre);
+    List<Book> findAllByUserAndGenreIgnoreCase(Genre genre, User user);
     Book startReading(Long id);
     Book finishReading(Long id);
 }

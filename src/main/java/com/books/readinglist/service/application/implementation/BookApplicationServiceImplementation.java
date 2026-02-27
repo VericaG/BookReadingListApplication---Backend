@@ -8,14 +8,12 @@ import com.books.readinglist.domain.models.Book;
 import com.books.readinglist.domain.models.User;
 import com.books.readinglist.dto.CreateBookDto;
 import com.books.readinglist.dto.DisplayBookDto;
-import com.books.readinglist.dto.DisplayUserDto;
 import com.books.readinglist.service.application.BookApplicationService;
 import com.books.readinglist.service.domain.BookService;
 import com.books.readinglist.service.domain.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookApplicationServiceImplementation implements BookApplicationService {
@@ -29,26 +27,27 @@ public class BookApplicationServiceImplementation implements BookApplicationServ
     }
 
     @Override
-    public List<DisplayBookDto> findAll() {
-        return DisplayBookDto.from(bookService.findAll());
+    public List<DisplayBookDto> findAll(String username) {
+        User user = userService.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        return DisplayBookDto.fromBooks(bookService.findAllByUser(user));
     }
 
     @Override
     public DisplayBookDto findById(Long id) {
         Book book = bookService.findById(id).orElseThrow(() -> new BookNotFoundException(id));
-        return DisplayBookDto.from(book);
+        return DisplayBookDto.fromBook(book);
     }
 
     @Override
     public DisplayBookDto update(Long id, CreateBookDto createBookDto, String username) {
         User user = userService.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
-        return DisplayBookDto.from(bookService.update(id, createBookDto.toBook(user)));
+        return DisplayBookDto.fromBook(bookService.update(id, createBookDto.toBook(user)));
     }
 
     @Override
     public DisplayBookDto save(CreateBookDto createBookDto, String username) {
         User user = userService.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
-        return DisplayBookDto.from(bookService.save(createBookDto.toBook(user)));
+        return DisplayBookDto.fromBook(bookService.save(createBookDto.toBook(user)));
 
     }
 
@@ -58,27 +57,30 @@ public class BookApplicationServiceImplementation implements BookApplicationServ
     }
 
     @Override
-    public List<DisplayBookDto> findAllByStatusAndUser(BookStatus status, User user) {
-        return DisplayBookDto.from(bookService.findAllByStatusAndUser(status, user));
+    public List<DisplayBookDto> findAllByStatusAndUser(BookStatus status, String username) {
+        User user = userService.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        return DisplayBookDto.fromBooks(bookService.findAllByStatusAndUser(status, user));
     }
 
     @Override
-    public List<DisplayBookDto> findAllByUser(User user) {
-        return DisplayBookDto.from(bookService.findAllByUser(user));
+    public List<DisplayBookDto> findAllByUser(String username) {
+        User user = userService.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        return DisplayBookDto.fromBooks(bookService.findAllByUser(user));
     }
 
     @Override
-    public List<DisplayBookDto> findAllByGenreIgnoreCase(Genre genre) {
-        return DisplayBookDto.from(bookService.findAllByGenreIgnoreCase(genre));
+    public List<DisplayBookDto> findAllByUserAndGenreIgnoreCase(Genre genre, String username) {
+        User user = userService.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        return DisplayBookDto.fromBooks(bookService.findAllByUserAndGenreIgnoreCase(genre, user));
     }
 
     @Override
     public DisplayBookDto startReading(Long id) {
-        return DisplayBookDto.from(bookService.startReading(id));
+        return DisplayBookDto.fromBook(bookService.startReading(id));
     }
 
     @Override
     public DisplayBookDto finishReading(Long id) {
-        return DisplayBookDto.from(bookService.finishReading(id));
+        return DisplayBookDto.fromBook(bookService.finishReading(id));
     }
 }

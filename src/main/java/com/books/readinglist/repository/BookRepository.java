@@ -13,5 +13,5 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByStatusAndUser(BookStatus status, User user);
     List<Book> findAllByUser(User user);
-    List<Book> findAllByGenre(Genre genre);
+    List<Book> findAllByGenreAndUser(Genre genre, User user);
 }
